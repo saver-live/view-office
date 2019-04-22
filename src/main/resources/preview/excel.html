@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Excel 在线预览</title>
+    <style>
+
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .tabtop13 {
+            table-layout: fixed;
+        }
+
+        .tabtop13 td {
+            line-height: 120%;
+            word-wrap: break-word;
+            border: 1px solid #cccccc;
+            padding: 3px;
+        }
+
+        .font-center {
+            text-align: center
+        }
+
+        .font-left {
+            text-align: left;
+        }
+
+        .font-right {
+            text-align: right;
+        }
+
+        .btbg {
+            background: #fff;
+        }
+
+        .titfont {
+            font-family: 微软雅黑;
+            font-size: 12px;
+            color: #444444;
+            width: 40px;
+            background: #FFFFFF;
+            /*background-color: #e9faff;*/
+        }
+
+        #header {
+            height: 40px;
+            position: relative;
+            background-color: #24589f;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        .unselect {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .sheetActive {
+            background-color: #24589f;
+        }
+
+        .sheetEnable {
+            background-color: green;
+        }
+
+        #footer {
+            height: 60px;
+            margin-top: 2px;
+            padding-left: 20px;
+        }
+
+        .logo {
+            width: 34px;
+            height: 34px;
+        }
+
+        #bonfire-pageloader {
+            background-color: #24589f;
+            height: 100%;
+            width: 100%;
+            z-index: 99999999999999;
+        }
+
+        #bonfire-pageloader svg {
+            fill: #fff;
+
+        }
+
+        .bonfire-pageloader-icon {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            opacity: 1;
+            top: 0;
+            text-align: center;
+            color: #fff;
+        }
+
+        #bonfire-pageloader svg {
+            -webkit-animation: spin 2s linear infinite;
+            -moz-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+            width: 100px;
+            height: 100px;
+        }
+
+        @-webkit-keyframes spin {
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @-moz-keyframes spin {
+            100% {
+                -moz-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        .t{
+            background: url("/images/excel.png") no-repeat 20px 0;
+            background-size:30px 30px;
+            -moz-background-size:100% 100%;
+            height: 30px;
+            display: block;
+        }
+        .font30 {
+            color: windowtext;
+            font-size: 11.0pt;
+            font-weight: 700;
+            font-style: normal;
+            text-decoration: none;
+            font-family: "Wingdings 2", serif;
+            mso-font-charset: 2;
+        }
+    </style>
+</head>
+<body>
+<!-- //新增 -->
+<div id="bonfire-pageloader" style="position: fixed;" class="bonfire-pageloader-fade bonfire-pageloader-hide">
+    <div class="bonfire-pageloader-icon" style="display: none;">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="100px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+        <path id="loading-12-icon" d="M291,82.219c0,16.568-13.432,30-30,30s-30-13.432-30-30s13.432-30,30-30S291,65.65,291,82.219z
+             M261,404.781c-15.188,0-27.5,12.312-27.5,27.5s12.312,27.5,27.5,27.5s27.5-12.312,27.5-27.5S276.188,404.781,261,404.781z
+             M361.504,113.167c-4.142,7.173-13.314,9.631-20.487,5.489c-7.173-4.141-9.631-13.313-5.49-20.487
+            c4.142-7.173,13.314-9.631,20.488-5.489C363.188,96.821,365.645,105.994,361.504,113.167z M188.484,382.851
+            c-14.348-8.284-32.697-3.368-40.98,10.98c-8.285,14.349-3.367,32.696,10.98,40.981c14.35,8.283,32.697,3.367,40.98-10.981
+            C207.75,409.482,202.834,391.135,188.484,382.851z M421.33,184.888c-8.368,4.831-19.07,1.965-23.901-6.404
+            c-4.832-8.368-1.965-19.07,6.404-23.902c8.368-4.831,19.069-1.964,23.9,6.405C432.566,169.354,429.699,180.056,421.33,184.888z
+             M135.399,329.767c-8.285-14.35-26.633-19.266-40.982-10.982c-14.348,8.285-19.264,26.633-10.979,40.982
+            c8.284,14.348,26.632,19.264,40.981,10.98C138.767,362.462,143.683,344.114,135.399,329.767z M436.031,277.249
+            c-11.044,0-20-8.953-20-19.999c0-11.045,8.955-20.001,20.001-20.001c11.044,0,19.999,8.955,19.999,20.002
+            C456.031,268.295,447.078,277.249,436.031,277.249z M115.97,257.251c-0.001-16.57-13.433-30.001-30.001-30.002
+            c-16.568,0.001-29.999,13.432-30,30.002c0.001,16.566,13.433,29.998,30.001,30C102.538,287.249,115.969,273.817,115.97,257.251z
+             M401.333,364.248c-10.759-6.212-14.446-19.97-8.234-30.73c6.212-10.759,19.971-14.446,30.731-8.233
+            c10.759,6.211,14.445,19.971,8.232,30.73C425.852,366.774,412.094,370.46,401.333,364.248z M135.398,184.736
+            c8.285-14.352,3.368-32.698-10.98-40.983c-14.349-8.283-32.695-3.367-40.981,10.982c-8.282,14.348-3.366,32.696,10.981,40.981
+            C108.768,204,127.115,199.082,135.398,184.736z M326.869,421.328c-6.902-11.953-2.807-27.242,9.148-34.145
+            s27.243-2.806,34.146,9.149c6.902,11.954,2.806,27.243-9.15,34.145C349.059,437.381,333.771,433.284,326.869,421.328z
+             M188.482,131.649c14.352-8.286,19.266-26.633,10.982-40.982c-8.285-14.348-26.631-19.264-40.982-10.98
+            c-14.346,8.285-19.264,26.633-10.98,40.982C155.787,135.017,174.137,139.932,188.482,131.649z"></path>
+        </svg>
+    </div>
+</div>
+
+
+<div id="header" class="unselect">
+</div>
+<div style="width: 100%;height: 200px;overflow: scroll;" id="sheet">
+    <table id="table" border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#cccccc" class="tabtop13"
+           style="table-layout: fixed" align="center" style="">
+        <tbody id="excel-data">
+        </tbody>
+    </table>
+</div>
+<div id="footer"></div>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script>
+    //
+    <!-- 加载动画 -->
+    var loading = true;
+    resizenow();
+
+    var width = $(window).width();//获取浏览器窗口宽度
+    var height = $(window).height();//获取浏览器窗口宽度
+    var _url = '/';
+    $("#sheet").css('height', height - 112);
+    $("#sheet").css('width', width);
+    var sheetSize = 1;
+    var activeSheet = 0;
+    var colSize = 26;
+    var rowSize = 30;
+    var excel = {excelData};
+    // initExcel();
+    // initSheet();
+
+    loading = false;
+    sheetSize = excel.length;
+    //初始化页面头部
+    // display:inline-block;vertical-align: middle;
+    // var headerHtml = '<img class="logo" src="' + _url + 'images/excel.png" />' +
+    //     '<span style="font-size:20px">{name}</span>';
+    var headerHtml='<p class="t">{name}</p>';
+    $('#header').append(headerHtml);
+
+    $(document).ready(function () {
+        var isResize = false;
+        var isDrag = false;
+        var dom;
+        var downX;
+        var width;
+
+        //sheet标签页
+        initSheet();
+        //初始化表格
+        setSheet(activeSheet);
+        //绑定事件
+        rebind();
+        //新增
+        $("#bonfire-pageloader").remove();
+
+        function rebind() {
+            //滚动监听
+            $("#sheet").scroll(function () {
+                var scrollTop = $("#sheet").scrollTop();
+                var scrollLeft = $("#sheet").scrollLeft();
+                $(".index").css("left", scrollLeft);
+                $(".title").css("top", scrollTop);
+            })
+            // 表格点击添加表格
+            $('.data').click(function (e) {
+                $(".data").css('outline', 'none');
+
+                if ($(e.target).hasClass('data')) {
+                    $(e.target).css('outline', '2px solid green');
+                }
+
+            })
+            //sheet切换
+            $('.tab').click(function (e) {
+                if (activeSheet == parseInt(e.target.id.substring(2))) {
+                    return;
+                }
+                $(".tab").removeClass('sheetActive');
+                $(".tab").addClass('sheetEnable');
+                $(e.target).removeClass('sheetEnable');
+                $(e.target).addClass('sheetActive');
+                activeSheet = parseInt(e.target.id.substring(2));
+
+                setSheet(activeSheet);
+                rebind();
+            })
+            //托拉表格宽度
+            $(".title").mousedown(function (event) {
+                if (isResize) {
+                    dom = event.target;
+                    downX = event.clientX;
+                    width = event.target.style.width
+                    isDrag = true;
+                }
+            });
+            //开始拖拽
+            $("#sheet").mouseup(function (event) {
+                isDrag = false;
+                isResize = false;
+                dom = '';
+                downX = '';
+                width = '';
+            });
+            //拖拽
+            $(".title").mousemove(function (event) {
+                var space = event.target.offsetWidth - event.offsetX;
+                if (space <= 4) {
+                    event.target.style.cursor = 'col-resize'
+                    isResize = true;
+                } else {
+                    if (!isDrag) {
+                        event.target.style.cursor = 'default'
+                        isResize = false;
+                    }
+                }
+            });
+        }
+
+        $("#sheet").mousemove(function (event) {
+            if (isDrag) {
+                // = 490;
+                var w = parseInt(width.substring(0, width.length - 2)) + event.clientX - downX + 'px';
+                dom.style.width = w;
+
+                var index = parseInt(dom.id.substring(2));
+                var length = $('#excel-data').children().length;
+                for (var i = 0; i < length; i++) {
+                    var id = 'r' + i + 'c' + index;
+                    $('#' + id).css('width', w);
+                }
+            }
+        });
+
+        $(window).resize(function () {
+            var width = $(window).width();//获取浏览器窗口宽度
+            var height = $(window).height();//获取浏览器窗口宽度
+            $("#sheet").css('height', height - 112);
+            $("#sheet").css('width', width);
+            //新增
+            if (loading) {
+                resizenow();
+            }
+        });
+
+        //滚动监听
+        $("#sheet").scroll(function () {
+            var scrollTop = $("#sheet").scrollTop();
+            var scrollLeft = $("#sheet").scrollLeft();
+            $(".index").css("left", scrollLeft);
+            $("#firstRow").css("top", scrollTop);
+        })
+    });
+
+    function setSheet(index) {
+        var sheet = excel[index];
+        var col = sheet.maxColSize;
+        var row = sheet.maxRowSize;
+
+        if (row > 30) {
+            rowSize = row;
+        }
+        if (col > 26) {
+            colSize = col;
+        }
+
+        $('#excel-data tr').remove();
+        $("#firstRow .title").remove();
+        initExcel();
+    }
+
+    function initSheet() {
+        // body...
+
+        var sheetHtml = '';
+        for (var i = 0; i < sheetSize; i++) {
+            cla = i == 0 ? 'sheetActive' : 'sheetEnable';
+            sheetHtml = sheetHtml + '<span id="sh' + i + '" class="unselect tab ' + cla + '" style="margin-left: 12px;padding:2px 10px;color: white;display: inline-block">sheet1</span>';
+        }
+
+        $("#footer span").remove();
+        $("#footer").append(sheetHtml);
+
+        if (excel.length > 0) {
+            for (var i = 0; i < excel.length; i++) {
+                $('#sh' + i).text(excel[i].name);
+            }
+
+        }
+    }
+
+    //动态生成表格格子
+    function initExcel() {
+        var rowHtml = '';
+
+        rowHtml = rowHtml + '<tr id="firstRow">' +
+            '<td class="titfont btbg font-center unselect" style="width: 20px">#</td>';
+
+        for (var i = 0; i < colSize; i++) {
+            var title = getTitle(i + 1);
+            rowHtml = rowHtml + '<td id="title' + i + '" class="btbg font-center titfont title unselect" style=" position:relative; width: 120px">' + title +
+                '</td>';
+        }
+
+        rowHtml = rowHtml + '</tr>';
+
+        for (var i = 0; i < rowSize; i++) {
+            var index = i + 1;
+            rowHtml = rowHtml + '<tr class="rowData">' +
+                '<td class="titfont btbg font-center index unselect" id="row' + index + '" style="position: relative;width: 20px">' + index + '</td>';
+            for (var j = 0; j < colSize; j++) {
+                rowHtml = rowHtml + '<td class="btbg data" id="r' + index + 'c' + j + '" style="width: 120px;"></td>';
+            }
+            rowHtml = rowHtml + '</tr>';
+        }
+        $('#excel-data').append(rowHtml);
+        //设置数据
+        if (excel.length > 0) {
+            var temp = excel[parseInt(activeSheet)].data;
+
+            for (var i = 0; i < temp.length; i++) {
+                var x = temp[i].x;
+                var y = temp[i].y + 1;
+
+                $('#r' + y + 'c' + x).html(temp[i].text);
+
+                var background = temp[i].background;
+                if (background){
+
+                }
+                $('#r' + y + 'c' + x).css('background', background);
+                //加粗
+                var bold = temp[i].bold;
+                if (bold == 1) {
+                    $('#r' + y + 'c' + x).css('font-weight', 'bold');
+                }
+
+                //文字大小
+                var fontHeightInPoints = temp[i].fontHeightInPoints;
+                if (fontHeightInPoints != undefined && fontHeightInPoints != 0) {
+                    $('#r' + y + 'c' + x).css('font-size', fontHeightInPoints + 'px');
+                }
+
+                //居中
+                var align = temp[i].align;
+                if (align == 2) {
+                    $('#r' + y + 'c' + x).addClass('font-center');
+                } else if (align == 1) {
+                    $('#r' + y + 'c' + x).addClass('font-left');
+                } else if (align == 3) {
+                    $('#r' + y + 'c' + x).addClass('font-right');
+                }
+
+            }
+        }
+        //合并单元格
+        if (excel.length > 0) {
+            var re = excel[parseInt(activeSheet)].mergedRegions;
+            for (var i = 0; i < re.length; i++) {
+                var firstColumn = re[i].firstColumn;
+                var firstRow = re[i].firstRow;
+                var lastColumn = re[i].lastColumn;
+                var lastRow = re[i].lastRow;
+                $("#r" + (firstRow + 1) + 'c' + firstColumn).attr('colSpan', lastColumn - firstColumn + 1);
+                $("#r" + (firstRow + 1) + 'c' + firstColumn).attr('rowSpan', lastRow - firstRow + 1);
+                var spp = lastColumn - firstColumn + 1;
+                var rsp = lastRow - firstRow + 1;
+
+                if (spp != 1 || rsp != 1) {
+                    for (var j = 0; j < rsp; j++) {
+                        for (var k = 0; k < spp; k++) {
+                            if (j == 0 && k == 0) {
+                                continue;
+                            }
+                            $("#r" + (firstRow + 1 + j) + 'c' + (firstColumn + k)).remove();
+                        }
+                    }
+                }
+            }
+        }
+        //设置边框
+        if (excel.length > 0) {
+            var tempData = excel[parseInt(activeSheet)].data;
+            for (var i = 0; i < tempData.length; i++) {
+                var x = tempData[i].x;
+                var y = tempData[i].y + 1;
+                setBorder($('#r' + y + 'c' + x), tempData[i]);
+            }
+        }
+        //设置列宽
+        if (excel.length > 0) {
+            var widths = excel[parseInt(activeSheet)].widths;
+            var heights = excel[parseInt(activeSheet)].heights;
+            if (heights != undefined) {
+                for (var i = 0; i < heights.length; i++) {
+                    var rowIndex = heights[i].rowIndex;
+                    var height = heights[i].height;
+                    $('#row' + (rowIndex + 1)).css('height', height + 'px');
+                }
+            }
+            if (widths != undefined) {
+                for (var i = 0; i < widths.length; i++) {
+                    var columnIndex = widths[i].columnIndex;
+                    var width = widths[i].width;
+
+                    $('#title' + columnIndex).css('width', width + 'px');
+                }
+            }
+        }
+    }
+
+    //根据索引获取列标题
+    function getTitle(index) {
+        var titles = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        if (index < 27) {
+            return titles[index - 1]
+        }
+        var i = 1;
+        var title = ''
+        while ((index - Math.pow(26, i)) > -26) {
+            title = titles[index % 26];
+            index = Math.ceil(index / 26);
+            i = i + 1;
+        }
+        title = titles[index - 2] + title
+        return title
+    }
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    function setBorder(obj, data) {
+
+        var borderBottom = data.borderBottom;
+        var borderBottomColor = data.borderBottomColor;
+        var borderTop = data.borderTop;
+        var borderTopColor = data.borderTopColor;
+        var borderLeft = data.borderLeft;
+        var borderLeftColor = data.borderLeftColor;
+        var borderRight = data.borderRight;
+        var borderRightColor = data.borderRightColor;
+
+        if (borderBottom != 0) {
+            if (borderBottomColor == 64) {
+                obj.css('border-bottom-color', 'black');
+            } else {
+                var c = getColor(borderBottomColor);
+                obj.css('border-bottom-color', c);
+            }
+        }
+        if (borderTop != 0) {
+            if (borderTopColor == 64) {
+                obj.css('border-top-color', 'black');
+            } else {
+                var c = getColor(borderTopColor);
+                obj.css('border-top-color', c);
+            }
+        }
+        if (borderLeft != 0) {
+            if (borderLeftColor == 64) {
+                obj.css('border-left-color', 'black');
+            } else {
+                var c = getColor(borderLeftColor);
+                obj.css('border-left-color', c);
+            }
+        }
+        if (borderRight != 0) {
+            if (borderRightColor == 64) {
+                obj.css('border-right-color', 'black');
+            } else {
+                var c = getColor(borderRightColor);
+                obj.css('border-right-color', c);
+            }
+        }
+    }
+
+    function getColor(index) {
+        var colorArr = 'BLACK(8),' +
+            'WHITE(9),' +
+            'RED(10),' +
+            'BRIGHT_GREEN(11),' +
+            'BLUE(12),' +
+            'YELLOW(13),' +
+            'PINK(14),' +
+            'TURQUOISE(12),' +
+            'DARK_RED(16),' +
+            'GREEN(17),' +
+            'DARK_BLUE(18),' +
+            'DARK_YELLOW(19),' +
+            'VIOLET(20),' +
+            'TEAL(21),' +
+            'GREY_22_PERCENT(22),' +
+            'GREY_20_PERCENT(23),' +
+            'CORNFLOWER_BLUE(24),' +
+            'MAROON(22),' +
+            'LEMON_CHIFFON(26),' +
+            'ORCHID(28),' +
+            'CORAL(29),' +
+            'ROYAL_BLUE(30),' +
+            'LIGHT_CORNFLOWER_BLUE(31),' +
+            'SKY_BLUE(40),' +
+            'LIGHT_TURQUOISE(41),' +
+            'LIGHT_GREEN(42),' +
+            'LIGHT_YELLOW(43),' +
+            'PALE_BLUE(44),' +
+            'ROSE(42),' +
+            'LAVENDER(46),' +
+            'TAN(47),' +
+            'LIGHT_BLUE(48),' +
+            'AQUA(49),' +
+            'LIME(20),' +
+            'GOLD(21),' +
+            'LIGHT_ORANGE(22),' +
+            'ORANGE(23),' +
+            'BLUE_GREY(24),' +
+            'GREY_40_PERCENT(22),' +
+            'DARK_TEAL(26),' +
+            'SEA_GREEN(27),' +
+            'DARK_GREEN(28),' +
+            'OLIVE_GREEN(29),' +
+            'BROWN(60),' +
+            'PLUM(61),' +
+            'INDIGO(62),' +
+            'GREY_80_PERCENT(63),' +
+            'WHITE(64)';
+
+        var arr = colorArr.split(',');
+        var l = index + '';
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].indexOf(l) > -1) {
+                var tp = arr[i].replace(l, "");
+                return tp.substring(0, tp.length - 2);
+            }
+        }
+        return "";
+    }
+
+    // function getText(text) {
+    //     return text;
+    // }
+
+    //加载动画
+    function resizenow() {
+        var browserwidth = $(window).width();
+        var browserheight = $(window).height();
+        $('.bonfire-pageloader-icon').css('right', ((browserwidth - $(".bonfire-pageloader-icon").width()) / 2)).css('top', ((browserheight - $(".bonfire-pageloader-icon").height()) / 2));
+        $('.bonfire-pageloader-icon').show();
+    }
+</script>
+</body>
+</html>
