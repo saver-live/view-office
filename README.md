@@ -9,7 +9,7 @@ jacob只支持window服务器,使用jacob对word，ppt文件转换为pdf文件�
 
 #### 安装教程
 
-0. 自行安装office组件
+0. 自行安装office软件
 1. 下载该项目
 2. 使用idea编译该spring boot项目
 3. 执行 java -jar demo.jar
